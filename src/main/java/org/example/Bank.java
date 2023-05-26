@@ -14,7 +14,12 @@ public class Bank {
 
     public void collectCommission(int commission) {
         for (Account account: accounts) {
-            totalCommissionCollected += account.deductCommission(commission);
+            try {
+                totalCommissionCollected += account.deductCommission(commission);
+            } catch (IllegalArgumentException e) {
+                System.out.println("Failed to deduct commission from Account ID " + account.getAccountId()
+                                    + ". Reason: " +e.getMessage());
+            }
         }
     }
 
@@ -24,9 +29,14 @@ public class Bank {
         System.out.println("Commission value for each user: " + comission);
         for (int i = 0; i < accounts.size(); i++) {
             Account account = accounts.get(i);
-            System.out.println("--- User " + (i+1) + " ---");
-            System.out.println("Debit account balance: " + account.debitBalance);
-            System.out.println("Credit account balance: " + account.creditBalance);
+            System.out.println("--- User " + account.getAccountId() + " ---");
+            System.out.println("Debit account balance: " + account.getDebitBalance());
+            System.out.println("Credit account balance: " + account.getCreditBalance());
+            int commissionDeducted = comission;
+            if (comission > account.getDebitBalance()) {
+                commissionDeducted = account.getDebitBalance();
+            }
+            System.out.println("Commission deducted: " + commissionDeducted);
         }
         System.out.println("========================");
     }

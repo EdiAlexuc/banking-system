@@ -2,13 +2,50 @@ package org.example;
 
 public class Account {
 
-    int debitBalance;
-    int creditBalance;
-    int creditLimit;
+    private int accountId;
+    private int debitBalance;
+    private int creditBalance;
+    private int creditLimit;
 
-    public Account(int debitBalance, int creditBalance, int creditLimit) {
+    public Account(int accountId,int debitBalance, int creditBalance, int creditLimit) {
+        if (debitBalance < 0 || creditBalance < 0 || creditLimit < 0) {
+            throw new IllegalArgumentException("Invalid account balances or credit limit");
+        }
         this.debitBalance = debitBalance;
         this.creditBalance = creditBalance;
+        this.creditLimit = creditLimit;
+        this.accountId = accountId;
+    }
+
+    public int getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(int accountId) {
+        this.accountId = accountId;
+    }
+
+    public int getDebitBalance() {
+        return debitBalance;
+    }
+
+    public void setDebitBalance(int debitBalance) {
+        this.debitBalance = debitBalance;
+    }
+
+    public int getCreditBalance() {
+        return creditBalance;
+    }
+
+    public void setCreditBalance(int creditBalance) {
+        this.creditBalance = creditBalance;
+    }
+
+    public int getCreditLimit() {
+        return creditLimit;
+    }
+
+    public void setCreditLimit(int creditLimit) {
         this.creditLimit = creditLimit;
     }
 
@@ -35,10 +72,16 @@ public class Account {
     }
 
     public void deposit(int amount) {
+        if (amount < 0) {
+            throw new IllegalArgumentException("Invalid deposit amount");
+        }
         debitBalance += amount;
     }
 
     public void withdraw(int amount) {
+        if (amount < 0) {
+            throw new IllegalArgumentException("Invalid withdrawal amount");
+        }
         if (debitBalance >= amount) {
             debitBalance -= amount;
         } else {
@@ -47,7 +90,7 @@ public class Account {
             if (creditBalance + remaining <= creditLimit) {
                 creditBalance += remaining;
             } else {
-                System.out.println("Unable to withdraw. Exceeds credit limit!");
+                throw new IllegalArgumentException("Unable to withdraw. Exceeds credit limit!");
             }
         }
     }
